@@ -45,6 +45,7 @@ public class TestAtLeastOneMoveExists {
         };
 
         b = new Board(rawVals, 0);
+        //System.out.println(b.toString());
         assertTrue("A tilt in any direction will change the board\n"
                         + b,
                 Model.atLeastOneMoveExists(b));
@@ -125,6 +126,7 @@ public class TestAtLeastOneMoveExists {
         };
 
         b = new Board(rawVals, 0);
+        //System.out.println(b.toString());
         assertFalse("No move exists\n" + b,
                 Model.atLeastOneMoveExists(b));
     }
