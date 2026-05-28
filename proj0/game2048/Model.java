@@ -94,6 +94,8 @@ public class Model extends Observable {
         setChanged();
     }
 
+
+
     /** Tilt the board toward SIDE. Return true iff this changes the board.
      *
      * 1. If two Tile objects are adjacent in the direction of motion and have
@@ -107,13 +109,83 @@ public class Model extends Observable {
      *    and the trailing tile does not.
      * */
     public boolean tilt(Side side) {
+        board.setViewingPerspective(side);
         boolean changed;
         changed = false;
-
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        for (int k = 0; k < board.size(); k++) //columns
+        {
+            int i = 3;
+            int j = i-1;
+            //System.out.println("--------");
+            while (j >= 0) {
+                /*
+                System.out.println("k: " + k);
+                System.out.println("i: " + i);
+                System.out.println("j: " + j);
+                 */
 
+                Tile t_i = board.tile(k,i);
+                Tile t_j = board.tile(k,j);
+                if (t_j != null && t_i == null) {
+                    board.move(k,i,t_j);
+                    changed = true;
+                    //j = j - 1;
+                } else if (t_j != null && t_i != null) {
+                    if (t_i.value() == t_j.value()) { //merging
+                        board.move(k, i, t_j);
+                        this.score = this.score + 2 * t_i.value();
+                        changed = true;
+                    }
+                    if (t_i.value() != t_j.value() && ((i - j) > 1)) { //move j up to i-1
+                        board.move(k,i-1,t_j);
+                        changed = true;
+                    }
+                    i = i - 1;
+                }
+                j = j - 1;
+
+                /*
+                if (t_j != null && t_i == null) {
+                    board.move(k,i,t_j);
+                    changed = true;
+                    j = j - 1;
+                } else if (t_j != null && t_i != null) {
+                    if (t_i.value() == t_j.value()) { //merging
+                        board.move(k, i, t_j);
+                        this.score = this.score + 2 * t_i.value();
+                        changed = true;
+                        j = j - 1;
+                    }
+                    i = i - 1;
+                } else { //t_j == null..move j pointer along
+                    j = j - 1;
+                }
+                */
+
+
+                /**if (t_j != null) {
+                    if (t_i == null) {
+                        board.move(k, i, t_j);
+                        changed = true;
+                        j = j - 1;
+                    } else {
+                        if (t_i.value() == t_j.value()) {
+                            board.move(k, i, t_j);
+                            this.score = this.score + 2*t_i.value();
+                            changed = true;
+                            j = j - 1;
+                        }
+                        i = i - 1;
+                    }
+                } else { //t_j is null. move pointer along
+                    j = j - 1;
+                } */
+            }
+        }
+        board.setViewingPerspective(Side.NORTH);
         checkGameOver();
         if (changed) {
             setChanged();
