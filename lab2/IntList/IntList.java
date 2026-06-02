@@ -36,6 +36,7 @@ public class IntList {
         return rest.get(i - 1);
     }
 
+
     /** Method to return a string representation of an IntList */
     public String toString() {
         if (rest == null) {
@@ -64,4 +65,63 @@ public class IntList {
         System.arraycopy(argList, 1, restList, 0, argList.length - 1);
         return new IntList(argList[0], IntList.of(restList));
     }
+
+    /*
+     * =================================================================
+     * from HW03 Spring 2026
+     * =================================================================
+     */
+    /**
+     * Returns an IntList identical to L, but with
+     * each element incremented by x. Modifies the original list.
+     * You are not allowed to use "new" in this method.
+     */
+    public static IntList incrRecursiveDestructive(IntList L, int x) {
+        if (L == null) {
+            return null;
+        }
+        L.first += x;
+        L.rest = incrRecursiveDestructive(L.rest, x);
+        return L;
+    }
+
+    /*
+     * =================================================================
+     * OPTIONAL METHODS
+     * =================================================================
+     */
+
+    /**
+     * Returns the sum of all elements in the IntList.
+     */
+    public int sum() {
+        if (this.rest == null) {
+            return first;
+        }
+        return first + this.rest.sum();
+    }
+
+    /**
+     * Destructively adds x to the end of the list.
+     */
+    public void addLast(int x) {
+        IntList p = this;
+        while (p.rest != null) p = p.rest;
+        p.rest = new IntList(x, null);
+    }
+
+    /**
+     * Destructively adds x to the front of this IntList.
+     * This is a bit tricky to implement. The standard way to do this would be
+     * to return a new IntList, but for practice, this implementation should
+     * be destructive.
+     */
+    public void addFirst(int x) {
+        IntList insert;
+        insert = new IntList(this.first, this.rest);
+        this.first = x;
+        this.rest = insert;
+    }
+
+
 }
