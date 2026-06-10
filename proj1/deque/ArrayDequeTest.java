@@ -162,8 +162,8 @@ public class ArrayDequeTest {
             }
         }
         assertEquals(0, Math.floorMod(lld1.get(0), 2));
-        assertEquals(1, Math.floorMod(lld1.get(lld1.size() -1), 2));
-        assertEquals(999,(int) lld1.removeLast());
+        assertEquals(1, Math.floorMod(lld1.get(lld1.size() - 1), 2));
+        assertEquals(999, (int) lld1.removeLast());
         assertEquals(998, (int) lld1.removeFirst());
         assertEquals(998, lld1.size());
     }
@@ -186,5 +186,23 @@ public class ArrayDequeTest {
         for (double i = 999999; i > 500000; i--) {
             assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
         }
+    }
+
+    @Test
+    /*Test equals() method */
+    public void isEqualsTest() {
+        ArrayDeque<Integer> aLLDeque = new ArrayDeque<>();
+        ArrayDeque<Integer> b = new ArrayDeque<>();
+        aLLDeque.addFirst(1);
+        aLLDeque.addFirst(2);
+        aLLDeque.addFirst(3);
+
+        b.addFirst(2);
+        b.addFirst(3);
+        b.addLast(1);
+
+        assertEquals(aLLDeque, b);
+
+        assertEquals("should be false, comparing ADeque to a single int", false, aLLDeque.equals(1));
     }
 }

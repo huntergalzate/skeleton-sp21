@@ -19,7 +19,7 @@ import java.util.Iterator;
  */
 
 
-public class ArrayDeque<T> implements Iterable<T> {
+public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     private T[] items;
     private int size;
     private int nextFirst;
@@ -64,16 +64,34 @@ public class ArrayDeque<T> implements Iterable<T> {
         nextLast = items.length - 1;
     }
 
-    /*
-    public Iterator<T> iterator() {
-
-    }
-    */
 
     public boolean equals(Object o) {
+        //check for reference identity
+        if (this == o) return true;
+
+        //check type (implicitly returns false if 'o' is null
+        if (!(o instanceof ArrayDeque<?>)) return false;
+
+        //explicitly case the object to your type
+        ArrayDeque<T> other = (ArrayDeque<T>) o;
+
+        if (other.size != this.size) return false;
+
+        Iterator<T> iterator1 = this.iterator();
+        Iterator<T> iterator2 = other.iterator();
+
+        //simultaneously traverse through each
+        while(iterator1.hasNext() && iterator2.hasNext()) {
+            T item1 = iterator1.next();
+            T item2 = iterator2.next();
+            if(!item1.equals(item2)) {
+                return false;
+            }
+        }
         return true;
     }
 
+    @Override
     public void addFirst(T x) {
         if (size == items.length) {
             resizeUp(2*size);
@@ -83,6 +101,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         size +=1;
     }
 
+    @Override
     public void addLast(T x) {
         if (size == items.length) {
             resizeUp(2*size);
@@ -92,14 +111,19 @@ public class ArrayDeque<T> implements Iterable<T> {
         size += 1;
     }
 
+    /**COMMENTED out per specs
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
+     */
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public void printDeque() {
         if (this.isEmpty()) {
             System.out.println("()");
@@ -119,6 +143,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         System.out.println(out.toString());
     }
 
+    @Override
     public T removeFirst() {
         int firstTrueIndex = Math.floorMod((nextFirst + 1), items.length);
         T returnItem = items[firstTrueIndex];
@@ -133,6 +158,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         return returnItem;
     }
 
+    @Override
     public T removeLast() {
         int lastTrueIndex = Math.floorMod((nextLast - 1), items.length);
         T returnItem = items[lastTrueIndex];
@@ -147,6 +173,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         return returnItem;
     }
 
+    @Override
     public T get(int index) {
         int firstTrueIndex = Math.floorMod((nextFirst + 1), items.length);
         int getIndex = Math.floorMod(firstTrueIndex + index, items.length);
