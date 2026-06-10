@@ -57,5 +57,9 @@ public class DequeRandomizedTest {
                 assertEquals("Checking size(): ", L.size(), A.size());
             }
         }
+
+        assertTrue("checking LL.equals: ", L.equals(A));
+
+        assertTrue("checking AD.equals: ", A.equals(L));
     }
 }

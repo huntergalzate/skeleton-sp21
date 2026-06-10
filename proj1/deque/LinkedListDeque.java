@@ -49,24 +49,24 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T>{
         if (this == o) return true;
 
         //check type (implicitly returns false if 'o' is null
-        if (!(o instanceof LinkedListDeque<?>)) return false;
+        if (!(o instanceof Deque<?>)) return false;
 
         //explicitly case the object to your type
-        LinkedListDeque<T> other = (LinkedListDeque<T>) o;
+        Deque<T> other = (Deque<T>) o;
 
-        if (other.size != this.size) return false;
+        if (other.size() != this.size) return false;
+
+        Iterator<T> iterator1 = this.iterator();
+        int otherIndex = 0;
 
         //simultaneously traverse through each
-        Node<T> otherCurrNode = other.sentinel.next;
-        Node<T> thisCurrNode = sentinel.next;
-
-        for (int traverseIndex = 0; traverseIndex < size; traverseIndex++) {
-            if (!otherCurrNode.item.equals(thisCurrNode.item)) {
+        while(iterator1.hasNext()) {
+            T item1 = iterator1.next();
+            T item2 = other.get(otherIndex);
+            if(!item1.equals(item2)) {
                 return false;
-            } else {
-                otherCurrNode = otherCurrNode.next;
-                thisCurrNode = thisCurrNode.next;
             }
+            otherIndex++;
         }
         return true;
     }

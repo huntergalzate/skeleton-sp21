@@ -70,23 +70,24 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         if (this == o) return true;
 
         //check type (implicitly returns false if 'o' is null
-        if (!(o instanceof ArrayDeque<?>)) return false;
+        if (!(o instanceof Deque<?>)) return false;
 
         //explicitly case the object to your type
-        ArrayDeque<T> other = (ArrayDeque<T>) o;
+        Deque<T> other = (Deque<T>) o;
 
-        if (other.size != this.size) return false;
+        if (other.size() != this.size) return false;
 
         Iterator<T> iterator1 = this.iterator();
-        Iterator<T> iterator2 = other.iterator();
+        int otherIndex = 0;
 
         //simultaneously traverse through each
-        while(iterator1.hasNext() && iterator2.hasNext()) {
+        while(iterator1.hasNext()) {
             T item1 = iterator1.next();
-            T item2 = iterator2.next();
+            T item2 = other.get(otherIndex);
             if(!item1.equals(item2)) {
                 return false;
             }
+            otherIndex++;
         }
         return true;
     }
@@ -204,20 +205,4 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
             return returnItem;
         }
     }
-
-    public static void main(String[] args) {
-        ArrayDeque<Integer> aDeque = new ArrayDeque<>();
-        aDeque.addFirst(1);
-        aDeque.addFirst(2);
-        aDeque.addFirst(3);
-        aDeque.addFirst(4);
-        aDeque.addFirst(5);
-
-        //iteration
-        for (int i : aDeque) {
-            System.out.println("Index i: " + i);
-        }
-
-    }
-
 }
