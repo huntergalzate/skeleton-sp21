@@ -7,15 +7,13 @@ public class Collatz {
     public static int nextNumber(int n) {
         if (n  % 2 == 0) {
             return n/2;
-        } else if (n % 2 == 1) {
-            return 3 * n + 1;
         } else {
-            return 1;
+            return 3 * n + 1;
         }
     }
 
     public static void main(String[] args) {
-        int n = 4;
+        int n = 32;
         System.out.print(n + " ");
         while (n != 1) {
             n = nextNumber(n);
