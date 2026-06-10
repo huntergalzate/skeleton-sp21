@@ -18,7 +18,7 @@ import java.util.Iterator;
  * @param <T>
  */
 
-public class LinkedListDeque<T> implements Iterable<T> {
+public class LinkedListDeque<T> implements Iterable<T>, Deque<T>{
 
     private static class Node<T> {
         public Node<T> prev;

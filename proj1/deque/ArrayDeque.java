@@ -151,7 +151,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         nextFirst = Math.floorMod((nextFirst + 1), items.length);
         if (returnItem != null) {
             size -= 1;
-            if ((double) size/items.length < USAGE_MIN && size >= 16) {
+            if ((double) size/items.length < USAGE_MIN && items.length >= 16) {
                 resizeDown();
             }
         }
@@ -166,7 +166,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         nextLast = Math.floorMod((nextLast - 1), items.length);
         if (returnItem != null) {
             size -= 1;
-            if ((double) size/items.length < USAGE_MIN && size >= 16) {
+            if ((double) size/items.length < USAGE_MIN && items.length >= 16) {
                 resizeDown();
             }
         }

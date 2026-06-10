@@ -148,6 +148,22 @@ public class ArrayDequeTest {
     }
 
     @Test
+    /** add 40 items. addFirst() only
+     * remove 29 items. check capacity
+     * remove 30th item. check capacity
+     */
+    public void resizeDownAllButOneTest() {
+        ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+        for (int i = 0; i < 64; i++) {
+            lld1.addFirst(i);
+        }
+        for (int i = 0; i < 63; i++) {
+            lld1.removeFirst();
+        }
+        assertEquals("checking capacity after resize", 8, lld1.getCapacity());
+    }
+
+    @Test
     /**
      * alternate addFirst() and addLast()
      */
