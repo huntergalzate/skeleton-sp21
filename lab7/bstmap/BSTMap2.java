@@ -2,26 +2,30 @@ package bstmap;
 
 import java.util.*;
 
-public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
+/**
+ * Class written using Iterable interface. After submission, autograder said it should not be implemented.
+ * Therefore, copied that version into this class BSTMap2.
+ * Rewrote BSTMap according to autograder specs (no Iterable interface)
+ * @param <K>
+ * @param <V>
+ */
+public class BSTMap2<K extends Comparable<K>,V> implements Map61B<K,V>, Iterable<K> {
 
     //instance variables for BSTMap
     private Node<K,V> root; //root of BST
     private Node<K,V> sentinel; //sentinel of BST
     private V deletedValue = null; //not thread safe?
 
-    @Override
-    public Iterator<K> iterator() {
-        return null;
-    }
-
     private static class Node<K extends Comparable<K>,V> {
         private K key;
         private V value;
         private Node<K,V> left;
         private Node<K,V> right;
+        //private Node<K,V> parent;
         private int size;
 
         public Node(Node<K,V> left, Node<K,V> right, K key, V value, int size) {
+            //this.parent = parent;
             this.left = left;
             this.key = key;
             this.value = value;
@@ -30,7 +34,7 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
         }
     }
 
-    public BSTMap() {
+    public BSTMap2() {
         sentinel = new Node<>(null, null, null, null, 0);
         sentinel.left = sentinel;
         sentinel.right = sentinel;
@@ -125,54 +129,28 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
         return sNode;
     }
 
-    private void populateSet(Node<K,V> sNode, Set<K> set) {
-        // 1. THE SAFETY WALL
-        // If a parent sends us into empty space, we do nothing and turn right around.
-        // This pops this frame off the stack and wakes up the parent who called us.
-        if (sNode == sentinel) {
-            return;
-        }
-        // 2. THE DIVE LEFT (Go down)
-        // We freeze right here! We pass the microphone down to our left child.
-        // We will sit here, paused on this exact line, until our entire left
-        // subtree is completely finished and processed.
-        populateSet(sNode.left, set);
-
-        // 3. THE WAKE UP & PROCESS (The Happy Path)
-        // When our left child finally finishes, our frame wakes up right here.
-        // Now it's our turn. We add our own key to the set.
-        set.add(sNode.key);
-
-        // 4. THE DIVE RIGHT (Go down again)
-        // We freeze one last time! We pass the microphone down to our right child.
-        // We wait for the entire right subtree to finish before we can officially
-        // complete our own method and hand control back to our own parent.
-        populateSet(sNode.right, set);
-    }
 
     /* Returns a Set view of the keys contained in this map. Not required for Lab 7.
      * If you don't implement this, throw an UnsupportedOperationException. */
     public Set<K> keySet() {
-        //empty set pass to helper recursive function populateSet()
         Set<K> llSet = new LinkedHashSet<>();
 
-        //kick-start the recursion
-        populateSet(this.root, llSet);
-
-        //llSet gets modified in the call above
+        //using my iterator on this (BSTMap)
+        for (K keyValue : this) {
+            llSet.add(keyValue);
+        }
         return llSet;
     }
 
-    public void printInOrder() {
+    public String printInOrder() {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
-        Set<K> llSet = this.keySet();
-        for (K keyValues : llSet) {
+        for (K keyValues : this) {
             sb.append(keyValues);
             sb.append(", ");
         }
         sb.append(")");
-        System.out.println(sb.toString());
+        return sb.toString();
     }
 
     /* Removes the mapping for the specified key from this map if present.
@@ -213,7 +191,7 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
                 //delete the original successor node
                 sNode.right = remove(sNode.right, successor.key);
             }
-         }
+        }
         sNode.size = sNode.left.size + sNode.right.size + 1;
         return sNode;
     }
@@ -229,4 +207,43 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
         }
         return remove(key);
     }
+
+
+    public Iterator<K> iterator() {
+        return new BSTMapIterator();
+    }
+    private class BSTMapIterator implements Iterator<K> {
+        private Deque<Node<K,V>> stack;
+
+
+        //go as far left as possible, pushing nodes onto the stack as we visit them
+        public BSTMapIterator() {
+            stack = new ArrayDeque<>();
+            Node<K,V> itCurrent = root;
+            while (itCurrent != sentinel) {
+                stack.push(itCurrent);
+                itCurrent = itCurrent.left;
+            }
+        }
+
+        public boolean hasNext() {
+            return !stack.isEmpty();
+        }
+
+        //once the constructor has finished, we are done going left from that particular subtree
+        //pop off the most far-left ('smallest') node, store its key value in a return variable,
+        //and then go to the right sub-tree, then go as far left as possible again
+        //repeating this process will always do the InOrder Traversal of left-root-right
+        public K next() {
+            Node<K,V> nodePopped = stack.pop();
+            K returnKeyValue = nodePopped.key;
+            Node<K,V> itCurrent = nodePopped.right;
+            while(itCurrent != sentinel) {
+                stack.push(itCurrent);
+                itCurrent = itCurrent.left;
+            }
+            return returnKeyValue;
+        }
+    }
 }
+
