@@ -28,13 +28,40 @@ public class TestBSTMap {
             assertTrue( null != b.get("hi" + i) && (b.get("hi"+i).equals(1+i))
                         && b.containsKey("hi" + i));
         }
-        assertEquals(455, b.size());
+        assertEquals("checking full bst..before clear()",455, b.size());
         b.clear();
-        assertEquals(0, b.size());
+        assertEquals("checking empty bst, after clear()", 0, b.size());
         for (int i = 0; i < 455; i++) {
             assertTrue(null == b.get("hi" + i) && !b.containsKey("hi" + i));
         }
     }
+
+    @Test
+    public void sanityClearTest2() {
+        BSTMap<Integer, Integer> b = new BSTMap<Integer, Integer>();
+        for (int i = 0; i < 20; i++) {
+            b.put(1+ i, 100+i);
+            //make sure put is working via containsKey and get
+            assertTrue( null != b.get(1+ i) && (b.get(1+i).equals(100+i))
+                    && b.containsKey(1 + i));
+        }
+        assertEquals(20, b.size());
+        b.clear();
+        assertEquals(0, b.size());
+        for (int i = 0; i < 20; i++) {
+            assertTrue(null == b.get(1 + i) && !b.containsKey(1 + i));
+        }
+    }
+
+    @Test
+    public void sanitySizeTest2() {
+        BSTMap<Integer, Integer> b = new BSTMap<Integer, Integer>();
+        b.put(2,200);
+        b.put(1,100);
+        b.put(3,300);
+        assertEquals(3, b.size());
+    }
+
 
     // assumes put works
     @Test

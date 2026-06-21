@@ -45,12 +45,13 @@ public class TestBSTMapExtra {
         q.put("a","a");
         q.put("d","a");
         q.put("e","a"); // a b c d e
-        assertTrue(null != q.remove("c"));
+        assertNotNull(q.remove("c"));
         assertFalse(q.containsKey("c"));
         assertTrue(q.containsKey("a"));
         assertTrue(q.containsKey("b"));
         assertTrue(q.containsKey("d"));
         assertTrue(q.containsKey("e"));
+        assertEquals("checking the size() updated from 5 to 4",4, q.size());
     }
 
     /* Remove Test 2
@@ -63,7 +64,8 @@ public class TestBSTMapExtra {
         q.put("b","a");
         q.put("a","a");
         q.put("d","a");
-        q.put("e","a");                         // a b c d e
+        q.put("e","a");
+        assertEquals(5, q.size());// a b c d e
         assertTrue(null != q.remove("e"));      // a b c d
         assertTrue(q.containsKey("a"));
         assertTrue(q.containsKey("b"));
@@ -78,6 +80,7 @@ public class TestBSTMapExtra {
         assertTrue(q.containsKey("a"));
         assertTrue(q.containsKey("b"));
         assertTrue(q.containsKey("f"));
+        assertEquals(3, q.size());
     }
 
     /* Remove Test 3
@@ -85,7 +88,7 @@ public class TestBSTMapExtra {
     *  when the node has only 1 or 0 children on either side. */
     @Test
     public void testRemoveRootEdge() {
-        BSTMap rightChild = new BSTMap();
+        BSTMap<Character, Integer> rightChild = new BSTMap<>();
         rightChild.put('A', 1);
         rightChild.put('B', 2);
         Integer result = (Integer) rightChild.remove('A');
@@ -99,7 +102,7 @@ public class TestBSTMapExtra {
         assertTrue(((Integer) rightChild.remove('A')).equals(new Integer(100)));
         assertTrue(rightChild.size()==9);
 
-        BSTMap leftChild = new BSTMap();
+        BSTMap<Character, Integer> leftChild = new BSTMap<>();
         leftChild.put('B', 1);
         leftChild.put('A', 2);
         assertTrue(((Integer) leftChild.remove('B')).equals(1));
