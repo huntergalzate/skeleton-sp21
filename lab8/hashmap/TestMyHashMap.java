@@ -96,6 +96,22 @@ public class TestMyHashMap {
     }
 
     @Test
+    public void smallKeySetALBucketsTest() {
+        MyHashMap<Integer, Integer> b = new MyHashMapALBuckets<>();
+        HashSet<Integer> values = new HashSet<Integer>();
+        int nSize = 15;
+        for (int i = 0; i < nSize; i++) {
+            b.put(i, i);
+            values.add(i);
+            //System.out.println("expected: " + values.size() + " actual: " + b.size());
+        }
+        assertEquals(nSize, b.size());
+        Set<Integer> keySet = b.keySet();
+        assertTrue(values.containsAll(keySet));
+        assertTrue(keySet.containsAll(values));
+    }
+
+    @Test
     public void sanityKeySetTest() {
         sanityKeySetTest(new MyHashMap<>());
     }
@@ -105,6 +121,7 @@ public class TestMyHashMap {
         for (int i = 0; i < 455; i++) {
             b.put("hi" + i, 1);
             values.add("hi" + i);
+            //System.out.println("expected: " + values.size() + " actual: " + b.size());
         }
         assertEquals(455, b.size()); //keys are there
         Set<String> keySet = b.keySet();
